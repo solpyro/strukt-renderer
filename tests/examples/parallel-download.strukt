@@ -1,0 +1,23 @@
+title: Parallel File Download and Verify
+
+parallel:
+    thread:
+        # Download and verify file A
+        call download("file-a.zip", destinationA)
+        call verify(destinationA, checksumA)
+        if verification failed:
+            call flagError("file-a checksum mismatch")
+    thread:
+        # Download and verify file B
+        call download("file-b.zip", destinationB)
+        call verify(destinationB, checksumB)
+        if verification failed:
+            call flagError("file-b checksum mismatch")
+    thread:
+        # Download and verify file C
+        call download("file-c.zip", destinationC)
+        call verify(destinationC, checksumC)
+        if verification failed:
+            call flagError("file-c checksum mismatch")
+
+call reportResults()
