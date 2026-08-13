@@ -120,6 +120,9 @@ npm run typecheck
 # Run all tests
 npm test
 
+# Update SVG snapshots after intentional renderer changes
+npm test -- --update-snapshots
+
 # Watch mode
 npm run test:watch
 
@@ -157,7 +160,7 @@ src/
   index.ts       public API + struktToSvg()
 tests/
   parser.test.ts      44 tests
-  renderer.test.ts    8 live tests + 36 todo
+  renderer.test.ts    88 tests (14 SVG snapshots in __snapshots__/)
   examples/           .strukt fixtures used by tests
 demo/
   generate.mjs   demo page generator script

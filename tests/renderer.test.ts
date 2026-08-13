@@ -1,7 +1,11 @@
-import { describe, it, expect } from 'vitest';
-import { struktToSvg, StruktRenderError } from '../src/index';
+import { describe, it, expect, vi } from 'vitest';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+import { readFileSync } from 'node:fs';
+import { struktToSvg, StruktParseError, StruktRenderError } from '../src/index';
 import type { DiagramAST } from '../src/index';
 import { render } from '../src/renderer';
+import * as rendererModule from '../src/renderer';
 
 // ---------------------------------------------------------------------------
 // Minimal hand-crafted ASTs used across multiple tests
@@ -15,6 +19,107 @@ const singleProcess: DiagramAST = {
 const withTitle: DiagramAST = {
   title: 'Find Maximum Value',
   body: [{ kind: 'process', text: 'set max to list[0]' }],
+};
+
+const withCall: DiagramAST = {
+  title: undefined,
+  body: [{ kind: 'call', text: 'validateInput(data)' }],
+};
+
+const withReturn: DiagramAST = {
+  title: undefined,
+  body: [{ kind: 'return', value: 'result' }],
+};
+
+const withBreak: DiagramAST = {
+  title: undefined,
+  body: [{ kind: 'break' }],
+};
+
+const withExit: DiagramAST = {
+  title: undefined,
+  body: [{ kind: 'exit' }],
+};
+
+const withIf: DiagramAST = {
+  title: undefined,
+  body: [{
+    kind: 'if',
+    condition: 'x > 0',
+    thenBranch: [{ kind: 'process', text: 'positive path' }],
+    elseIfBranches: [],
+    elseBranch: [{ kind: 'process', text: 'non-positive path' }],
+  }],
+};
+
+const withElseIf: DiagramAST = {
+  title: undefined,
+  body: [{
+    kind: 'if',
+    condition: 'x > 0',
+    thenBranch: [{ kind: 'process', text: 'positive' }],
+    elseIfBranches: [{ condition: 'x === 0', body: [{ kind: 'process', text: 'zero' }] }],
+    elseBranch: [{ kind: 'process', text: 'negative' }],
+  }],
+};
+
+const withSwitch: DiagramAST = {
+  title: undefined,
+  body: [{
+    kind: 'switch',
+    expression: 'day',
+    cases: [
+      { label: 'Monday',  isDefault: false, body: [{ kind: 'process', text: 'start report' }] },
+      { label: 'Friday',  isDefault: false, body: [{ kind: 'process', text: 'send summary' }] },
+      { label: 'default', isDefault: true,  body: [{ kind: 'process', text: 'continue' }] },
+    ],
+  }],
+};
+
+const withWhile: DiagramAST = {
+  title: undefined,
+  body: [{
+    kind: 'while',
+    condition: 'queue is not empty',
+    body: [{ kind: 'process', text: 'process item' }],
+  }],
+};
+
+const withDoWhile: DiagramAST = {
+  title: undefined,
+  body: [{
+    kind: 'do-while',
+    condition: 'more lines remain',
+    body: [{ kind: 'process', text: 'read next line' }],
+  }],
+};
+
+const withFor: DiagramAST = {
+  title: undefined,
+  body: [{
+    kind: 'for',
+    header: 'i from 1 to n',
+    body: [{ kind: 'process', text: 'sum = sum + i' }],
+  }],
+};
+
+const withLoop: DiagramAST = {
+  title: undefined,
+  body: [{
+    kind: 'loop',
+    body: [{ kind: 'process', text: 'wait for event' }],
+  }],
+};
+
+const withParallel: DiagramAST = {
+  title: undefined,
+  body: [{
+    kind: 'parallel',
+    threads: [
+      [{ kind: 'process', text: 'download file A' }],
+      [{ kind: 'process', text: 'download file B' }],
+    ],
+  }],
 };
 
 // ---------------------------------------------------------------------------
@@ -32,68 +137,158 @@ describe('render()', () => {
   });
 
   // ── SVG structure ──────────────────────────────────────────────────────────
-  it.todo('returns a string that starts with "<svg"');
-  it.todo('includes xmlns="http://www.w3.org/2000/svg"');
-  it.todo('includes a non-empty viewBox attribute');
-  it.todo('is parseable as valid XML');
+  it('returns a string that starts with "<svg"', () => {
+    expect(render(singleProcess)).toMatch(/^<svg/);
+  });
+
+  it('includes xmlns="http://www.w3.org/2000/svg"', () => {
+    expect(render(singleProcess)).toContain('xmlns="http://www.w3.org/2000/svg"');
+  });
+
+  it('includes a non-empty viewBox attribute', () => {
+    expect(render(singleProcess)).toMatch(/viewBox="[^"]+"/);
+  });
+
+  it('is parseable as valid XML', () => {
+    expect(render(singleProcess).trim()).toMatch(/^<svg[\s\S]*<\/svg>$/);
+  });
 
   // ── Title ──────────────────────────────────────────────────────────────────
-  it.todo('includes the title text when DiagramAST.title is defined');
-  it.todo('omits title element when DiagramAST.title is undefined');
+  it('includes the title text when DiagramAST.title is defined', () => {
+    expect(render(withTitle)).toContain('Find Maximum Value');
+  });
+
+  it('omits title element when DiagramAST.title is undefined', () => {
+    // Title bar is the only place font-weight="bold" appears.
+    expect(render(singleProcess)).not.toContain('font-weight="bold"');
+  });
 
   // ── Process nodes ──────────────────────────────────────────────────────────
-  it.todo('renders a ProcessNode as a plain filled rectangle');
-  it.todo('includes the process text inside the rectangle');
+  it('renders a ProcessNode as a plain filled rectangle', () => {
+    expect(render(singleProcess)).toMatchSnapshot();
+  });
+
+  it('includes the process text inside the rectangle', () => {
+    expect(render(singleProcess)).toContain('do something');
+  });
 
   // ── Call nodes ─────────────────────────────────────────────────────────────
-  it.todo('renders a CallNode with double vertical bars on both sides');
+  it('renders a CallNode with double vertical bars on both sides', () => {
+    expect(render(withCall)).toMatchSnapshot();
+  });
 
   // ── Exit nodes ─────────────────────────────────────────────────────────────
-  it.todo('renders ReturnNode / BreakNode / ExitNode as notched rectangles');
+  it('renders ReturnNode / BreakNode / ExitNode as notched rectangles', () => {
+    expect(render(withReturn)).toMatchSnapshot();
+    expect(render(withBreak)).toMatchSnapshot();
+    expect(render(withExit)).toMatchSnapshot();
+  });
 
   // ── If nodes ───────────────────────────────────────────────────────────────
-  it.todo('renders an IfNode with a diagonal condition bar');
-  it.todo('renders the then-branch in the left sub-column');
-  it.todo('renders the else-branch in the right sub-column');
-  it.todo('renders else-if chains by extending the condition split');
+  it('renders an IfNode with a diagonal condition bar', () => {
+    expect(render(withIf)).toMatchSnapshot();
+  });
+
+  it('renders the then-branch in the left sub-column', () => {
+    expect(render(withIf)).toContain('positive path');
+  });
+
+  it('renders the else-branch in the right sub-column', () => {
+    expect(render(withIf)).toContain('non-positive path');
+  });
+
+  it('renders else-if chains by extending the condition split', () => {
+    expect(render(withElseIf)).toMatchSnapshot();
+  });
 
   // ── Switch nodes ───────────────────────────────────────────────────────────
-  it.todo('renders a SwitchNode as a rectangle split into N vertical columns');
-  it.todo('labels each column with its case value');
+  it('renders a SwitchNode as a rectangle split into N vertical columns', () => {
+    expect(render(withSwitch)).toMatchSnapshot();
+  });
+
+  it('labels each column with its case value', () => {
+    const svg = render(withSwitch);
+    expect(svg).toContain('Monday');
+    expect(svg).toContain('Friday');
+    expect(svg).toContain('default');
+  });
 
   // ── While nodes ────────────────────────────────────────────────────────────
-  it.todo('renders a WhileNode with the condition bar at the TOP');
+  it('renders a WhileNode with the condition bar at the TOP', () => {
+    expect(render(withWhile)).toMatchSnapshot();
+  });
 
   // ── DoWhile nodes ──────────────────────────────────────────────────────────
-  it.todo('renders a DoWhileNode with the condition bar at the BOTTOM');
+  it('renders a DoWhileNode with the condition bar at the BOTTOM', () => {
+    expect(render(withDoWhile)).toMatchSnapshot();
+  });
 
   // ── For nodes ──────────────────────────────────────────────────────────────
-  it.todo('renders a ForNode with the iteration label at the top');
+  it('renders a ForNode with the iteration label at the top', () => {
+    expect(render(withFor)).toMatchSnapshot();
+  });
 
   // ── Loop nodes ─────────────────────────────────────────────────────────────
-  it.todo('renders a LoopNode with no condition bar');
+  it('renders a LoopNode with no condition bar', () => {
+    expect(render(withLoop)).toMatchSnapshot();
+  });
 
   // ── Parallel nodes ─────────────────────────────────────────────────────────
-  it.todo('renders a ParallelNode as a rectangle with N vertical columns');
-  it.todo('renders each thread body inside its column');
+  it('renders a ParallelNode as a rectangle with N vertical columns', () => {
+    expect(render(withParallel)).toMatchSnapshot();
+  });
+
+  it('renders each thread body inside its column', () => {
+    const svg = render(withParallel);
+    expect(svg).toContain('download file A');
+    expect(svg).toContain('download file B');
+  });
 
   // ── Dimensions ────────────────────────────────────────────────────────────
-  it.todo('uses the default width (600) when options.width is omitted');
-  it.todo('respects a custom options.width value in the viewBox');
-  it.todo('respects options.minRowHeight for leaf node heights');
+  it('uses the default width (600) when options.width is omitted', () => {
+    expect(render(singleProcess)).toContain('width="600"');
+  });
+
+  it('respects a custom options.width value in the viewBox', () => {
+    expect(render(singleProcess, { width: 800 })).toContain('width="800"');
+  });
+
+  it('respects options.minRowHeight for leaf node heights', () => {
+    // Short text: rowHeight is dominated by minRowHeight when it is large enough.
+    expect(render(singleProcess, { minRowHeight: 60 })).toContain('height="60"');
+  });
 
   // ── Typography ────────────────────────────────────────────────────────────
-  it.todo('applies the default font-family "monospace"');
-  it.todo('applies a custom fontFamily from options');
-  it.todo('applies a custom fontSize from options');
+  it('applies the default font-family "monospace"', () => {
+    expect(render(singleProcess)).toContain('font-family="monospace"');
+  });
+
+  it('applies a custom fontFamily from options', () => {
+    expect(render(singleProcess, { fontFamily: 'Arial' })).toContain('font-family="Arial"');
+  });
+
+  it('applies a custom fontSize from options', () => {
+    expect(render(singleProcess, { fontSize: 20 })).toContain('font-size="20"');
+  });
 
   // ── Theming ───────────────────────────────────────────────────────────────
-  it.todo('applies the "light" theme by default');
-  it.todo('applies the "dark" theme when options.theme is "dark"');
-  it.todo('overrides individual colours via options.colors');
+  it('applies the "light" theme by default', () => {
+    expect(render(singleProcess)).toContain('#f8f8f8');
+  });
+
+  it('applies the "dark" theme when options.theme is "dark"', () => {
+    expect(render(singleProcess, { theme: 'dark' })).toContain('#2d2d2d');
+  });
+
+  it('overrides individual colours via options.colors', () => {
+    expect(render(singleProcess, { colors: { processFill: '#abcdef' } })).toContain('#abcdef');
+  });
 
   // ── Error handling ─────────────────────────────────────────────────────────
-  it.todo('throws StruktRenderError for an unrecognised node kind');
+  it('throws StruktRenderError for an unrecognised node kind', () => {
+    const badAst = { title: undefined, body: [{ kind: 'unknown-kind' }] } as unknown as DiagramAST;
+    expect(() => render(badAst)).toThrow(StruktRenderError);
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -109,10 +304,30 @@ describe('struktToSvg()', () => {
     expect(svg).toContain('x = 1');
   });
 
-  it.todo('parses and renders a complete Strukt source string in one call');
-  it.todo('passes options through to the renderer');
-  it.todo('forwards StruktParseError from parse()');
-  it.todo('forwards StruktRenderError from render()');
+  it('parses and renders a complete Strukt source string in one call', () => {
+    const source = readFileSync(
+      join(dirname(fileURLToPath(import.meta.url)), 'examples', 'binary-search.strukt'),
+      'utf-8',
+    );
+    expect(struktToSvg(source)).toMatchSnapshot();
+  });
+
+  it('passes options through to the renderer', () => {
+    expect(struktToSvg('x = 1', { width: 800 })).toContain('width="800"');
+  });
+
+  it('forwards StruktParseError from parse()', () => {
+    // do: without a closing while is a guaranteed parse error.
+    expect(() => struktToSvg('do:\n    read line')).toThrow(StruktParseError);
+  });
+
+  it('forwards StruktRenderError from render()', () => {
+    const spy = vi.spyOn(rendererModule, 'render').mockImplementationOnce(() => {
+      throw new StruktRenderError('mocked', 'mock-kind');
+    });
+    expect(() => struktToSvg('x = 1')).toThrow(StruktRenderError);
+    spy.mockRestore();
+  });
 });
 
 // ---------------------------------------------------------------------------
