@@ -122,11 +122,11 @@ return result</code></pre></div>
 <rect x="0" y="170" width="540" height="34" fill="#f8f8f8" stroke="#333333" stroke-width="1"/>
 <text x="270" y="187" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">set mid to floor((low + high) / 2)</text>
 <rect x="0" y="204" width="540" height="48" fill="#fff3e0" stroke="none" stroke-width="1"/>
-<line x1="0" y1="252" x2="270" y2="204" stroke="#333333" stroke-width="1"/>
-<line x1="540" y1="252" x2="270" y2="204" stroke="#333333" stroke-width="1"/>
-<text x="90" y="218.4" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">Y</text>
-<text x="450" y="218.4" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">N</text>
-<text x="270" y="238.6" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">array[mid] == target</text>
+<line x1="0" y1="204" x2="270" y2="252" stroke="#333333" stroke-width="1"/>
+<line x1="540" y1="204" x2="270" y2="252" stroke="#333333" stroke-width="1"/>
+<text x="270" y="220" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">array[mid] == target</text>
+<text x="90" y="236" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">Y</text>
+<text x="450" y="236" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">N</text>
 <rect x="0" y="252" width="270" height="104" fill="#f8f8f8" stroke="none" stroke-width="1"/>
 <rect x="270" y="252" width="270" height="104" fill="#f8f8f8" stroke="none" stroke-width="1"/>
 <rect x="0" y="252" width="270" height="34" fill="#f8f8f8" stroke="#333333" stroke-width="1"/>
@@ -134,20 +134,18 @@ return result</code></pre></div>
 <polygon points="0,286 270,286 270,310 260,320 10,320 0,310" fill="#fce4ec" stroke="#333333" stroke-width="1"/>
 <text x="135" y="303" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">break</text>
 <rect x="270" y="252" width="270" height="52" fill="#fff3e0" stroke="none" stroke-width="1"/>
-<line x1="270" y1="304" x2="405" y2="252" stroke="#333333" stroke-width="1"/>
-<line x1="540" y1="304" x2="405" y2="252" stroke="#333333" stroke-width="1"/>
-<text x="315" y="267.6" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">Y</text>
-<text x="495" y="267.6" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">N</text>
-<text text-anchor="middle" font-family="monospace" font-size="14" fill="#222222"><tspan x="405" y="280.4" dominant-baseline="central">array[mid]</tspan><tspan x="405" y="298.4" dominant-baseline="central">&lt; target</tspan></text>
+<line x1="270" y1="252" x2="405" y2="304" stroke="#333333" stroke-width="1"/>
+<line x1="540" y1="252" x2="405" y2="304" stroke="#333333" stroke-width="1"/>
+<text text-anchor="middle" font-family="monospace" font-size="14" fill="#222222"><tspan x="405" y="260.3" dominant-baseline="central">array[mid] &lt;</tspan><tspan x="405" y="278.3" dominant-baseline="central">target</tspan></text>
+<text x="315" y="286.7" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">Y</text>
+<text x="495" y="286.7" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">N</text>
 <rect x="270" y="304" width="135" height="52" fill="#f8f8f8" stroke="none" stroke-width="1"/>
 <rect x="405" y="304" width="135" height="52" fill="#f8f8f8" stroke="none" stroke-width="1"/>
 <rect x="270" y="304" width="135" height="52" fill="#f8f8f8" stroke="#333333" stroke-width="1"/>
 <text text-anchor="middle" font-family="monospace" font-size="14" fill="#222222"><tspan x="337.5" y="321" dominant-baseline="central">set low to mid</tspan><tspan x="337.5" y="339" dominant-baseline="central">+ 1</tspan></text>
 <rect x="405" y="304" width="135" height="52" fill="#f8f8f8" stroke="#333333" stroke-width="1"/>
 <text text-anchor="middle" font-family="monospace" font-size="14" fill="#222222"><tspan x="472.5" y="321" dominant-baseline="central">set high to</tspan><tspan x="472.5" y="339" dominant-baseline="central">mid - 1</tspan></text>
-<line x1="405" y1="252" x2="405" y2="356" stroke="#333333" stroke-width="1"/>
 <rect x="270" y="252" width="270" height="104" fill="none" stroke="#333333" stroke-width="1"/>
-<line x1="270" y1="204" x2="270" y2="356" stroke="#333333" stroke-width="1"/>
 <rect x="0" y="204" width="540" height="152" fill="none" stroke="#333333" stroke-width="1"/>
 <rect x="0" y="136" width="540" height="220" fill="none" stroke="#333333" stroke-width="1"/>
 <polygon points="0,356 540,356 540,380 530,390 10,390 0,380" fill="#fce4ec" stroke="#333333" stroke-width="1"/>
@@ -171,7 +169,7 @@ for i from 0 to n - 1:
             swap array[j] and array[j + 1]
 
 return array</code></pre></div>
-      <div class="diagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 274" width="480" height="274">
+      <div class="diagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270" width="480" height="270">
 <rect width="100%" height="100%" fill="#ffffff"/>
 <rect x="0" y="0" width="480" height="34" fill="#fff3e0" stroke="#333333" stroke-width="1"/>
 <text x="240" y="17" text-anchor="middle" dominant-baseline="central" font-family="monospace" font-size="16" font-weight="bold" fill="#222222">Bubble Sort</text>
@@ -179,27 +177,28 @@ return array</code></pre></div>
 <text x="240" y="51" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">set n to length of array</text>
 <rect x="0" y="68" width="480" height="34" fill="#e3f2fd" stroke="#333333" stroke-width="1"/>
 <text x="240" y="85" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">for i from 0 to n - 1</text>
-<rect x="0" y="102" width="480" height="138" fill="#f8f8f8" stroke="none" stroke-width="1"/>
+<rect x="0" y="102" width="480" height="134" fill="#f8f8f8" stroke="none" stroke-width="1"/>
 <rect x="0" y="102" width="480" height="34" fill="#e3f2fd" stroke="#333333" stroke-width="1"/>
 <text x="240" y="119" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">for j from 0 to n - i - 2</text>
-<rect x="0" y="136" width="480" height="104" fill="#f8f8f8" stroke="none" stroke-width="1"/>
-<rect x="0" y="136" width="480" height="52" fill="#fff3e0" stroke="none" stroke-width="1"/>
-<line x1="0" y1="188" x2="240" y2="136" stroke="#333333" stroke-width="1"/>
-<line x1="480" y1="188" x2="240" y2="136" stroke="#333333" stroke-width="1"/>
-<text x="80" y="151.6" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">Y</text>
-<text x="400" y="151.6" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">N</text>
-<text text-anchor="middle" font-family="monospace" font-size="14" fill="#222222"><tspan x="240" y="164.4" dominant-baseline="central">array[j] &gt; array[j +</tspan><tspan x="240" y="182.4" dominant-baseline="central">1]</tspan></text>
-<rect x="0" y="188" width="240" height="52" fill="#f8f8f8" stroke="none" stroke-width="1"/>
-<rect x="240" y="188" width="240" height="52" fill="#f8f8f8" stroke="none" stroke-width="1"/>
-<rect x="0" y="188" width="240" height="52" fill="#f8f8f8" stroke="#333333" stroke-width="1"/>
-<text text-anchor="middle" font-family="monospace" font-size="14" fill="#222222"><tspan x="120" y="205" dominant-baseline="central">swap array[j] and array[j</tspan><tspan x="120" y="223" dominant-baseline="central">+ 1]</tspan></text>
-<rect x="240" y="188" width="240" height="32" fill="#f8f8f8" stroke="#333333" stroke-width="1"/>
-<line x1="240" y1="136" x2="240" y2="240" stroke="#333333" stroke-width="1"/>
-<rect x="0" y="136" width="480" height="104" fill="none" stroke="#333333" stroke-width="1"/>
-<rect x="0" y="102" width="480" height="138" fill="none" stroke="#333333" stroke-width="1"/>
-<rect x="0" y="68" width="480" height="172" fill="none" stroke="#333333" stroke-width="1"/>
-<polygon points="0,240 480,240 480,264 470,274 10,274 0,264" fill="#fce4ec" stroke="#333333" stroke-width="1"/>
-<text x="240" y="257" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">return array</text>
+<rect x="0" y="136" width="480" height="100" fill="#f8f8f8" stroke="none" stroke-width="1"/>
+<rect x="0" y="136" width="480" height="48" fill="#fff3e0" stroke="none" stroke-width="1"/>
+<line x1="0" y1="136" x2="240" y2="184" stroke="#333333" stroke-width="1"/>
+<line x1="480" y1="136" x2="240" y2="184" stroke="#333333" stroke-width="1"/>
+<text x="240" y="152" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">array[j] &gt; array[j + 1]</text>
+<text x="80" y="168" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">Y</text>
+<text x="400" y="168" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">N</text>
+<rect x="0" y="184" width="240" height="52" fill="#f8f8f8" stroke="none" stroke-width="1"/>
+<rect x="240" y="184" width="240" height="52" fill="#f8f8f8" stroke="none" stroke-width="1"/>
+<rect x="0" y="184" width="240" height="52" fill="#f8f8f8" stroke="#333333" stroke-width="1"/>
+<text text-anchor="middle" font-family="monospace" font-size="14" fill="#222222"><tspan x="120" y="201" dominant-baseline="central">swap array[j] and array[j</tspan><tspan x="120" y="219" dominant-baseline="central">+ 1]</tspan></text>
+
+<line x1="240" y1="184" x2="480" y2="184" stroke="#333333" stroke-width="1"/>
+<line x1="240" y1="184" x2="240" y2="236" stroke="#333333" stroke-width="1"/>
+<rect x="0" y="136" width="480" height="100" fill="none" stroke="#333333" stroke-width="1"/>
+<rect x="0" y="102" width="480" height="134" fill="none" stroke="#333333" stroke-width="1"/>
+<rect x="0" y="68" width="480" height="168" fill="none" stroke="#333333" stroke-width="1"/>
+<polygon points="0,236 480,236 480,260 470,270 10,270 0,260" fill="#fce4ec" stroke="#333333" stroke-width="1"/>
+<text x="240" y="253" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">return array</text>
 </svg></div>
     </div>
   </section>
@@ -246,19 +245,20 @@ call reportResults()</code></pre></div>
 <line x1="234" y1="120" x2="234" y2="172" stroke="#333333" stroke-width="1"/>
 <text text-anchor="middle" font-family="monospace" font-size="14" fill="#222222"><tspan x="120" y="137" dominant-baseline="central">verify(destinationA,</tspan><tspan x="120" y="155" dominant-baseline="central">checksumA)</tspan></text>
 <rect x="0" y="172" width="240" height="52" fill="#fff3e0" stroke="none" stroke-width="1"/>
-<line x1="0" y1="224" x2="120" y2="172" stroke="#333333" stroke-width="1"/>
-<line x1="240" y1="224" x2="120" y2="172" stroke="#333333" stroke-width="1"/>
-<text x="40" y="187.6" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">Y</text>
-<text x="200" y="187.6" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">N</text>
-<text text-anchor="middle" font-family="monospace" font-size="14" fill="#222222"><tspan x="120" y="200.4" dominant-baseline="central">verificat…</tspan><tspan x="120" y="218.4" dominant-baseline="central">failed</tspan></text>
+<line x1="0" y1="172" x2="120" y2="224" stroke="#333333" stroke-width="1"/>
+<line x1="240" y1="172" x2="120" y2="224" stroke="#333333" stroke-width="1"/>
+<text text-anchor="middle" font-family="monospace" font-size="14" fill="#222222"><tspan x="120" y="180.3" dominant-baseline="central">verification</tspan><tspan x="120" y="198.3" dominant-baseline="central">failed</tspan></text>
+<text x="40" y="206.7" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">Y</text>
+<text x="200" y="206.7" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">N</text>
 <rect x="0" y="224" width="120" height="70" fill="#f8f8f8" stroke="none" stroke-width="1"/>
 <rect x="120" y="224" width="120" height="70" fill="#f8f8f8" stroke="none" stroke-width="1"/>
 <rect x="0" y="224" width="120" height="70" fill="#e8f5e9" stroke="#333333" stroke-width="1"/>
 <line x1="6" y1="224" x2="6" y2="294" stroke="#333333" stroke-width="1"/>
 <line x1="114" y1="224" x2="114" y2="294" stroke="#333333" stroke-width="1"/>
 <text text-anchor="middle" font-family="monospace" font-size="14" fill="#222222"><tspan x="60" y="241" dominant-baseline="central">flagError…</tspan><tspan x="60" y="259" dominant-baseline="central">checksum</tspan><tspan x="60" y="277" dominant-baseline="central">mismatch&quot;)</tspan></text>
-<rect x="120" y="224" width="120" height="32" fill="#f8f8f8" stroke="#333333" stroke-width="1"/>
-<line x1="120" y1="172" x2="120" y2="294" stroke="#333333" stroke-width="1"/>
+
+<line x1="120" y1="224" x2="240" y2="224" stroke="#333333" stroke-width="1"/>
+<line x1="120" y1="224" x2="120" y2="294" stroke="#333333" stroke-width="1"/>
 <rect x="0" y="172" width="240" height="122" fill="none" stroke="#333333" stroke-width="1"/>
 <line x1="240" y1="68" x2="240" y2="294" stroke="#333333" stroke-width="1"/>
 <rect x="240" y="68" width="240" height="226" fill="#f8f8f8" stroke="none" stroke-width="1"/>
@@ -271,19 +271,20 @@ call reportResults()</code></pre></div>
 <line x1="474" y1="120" x2="474" y2="172" stroke="#333333" stroke-width="1"/>
 <text text-anchor="middle" font-family="monospace" font-size="14" fill="#222222"><tspan x="360" y="137" dominant-baseline="central">verify(destinationB,</tspan><tspan x="360" y="155" dominant-baseline="central">checksumB)</tspan></text>
 <rect x="240" y="172" width="240" height="52" fill="#fff3e0" stroke="none" stroke-width="1"/>
-<line x1="240" y1="224" x2="360" y2="172" stroke="#333333" stroke-width="1"/>
-<line x1="480" y1="224" x2="360" y2="172" stroke="#333333" stroke-width="1"/>
-<text x="280" y="187.6" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">Y</text>
-<text x="440" y="187.6" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">N</text>
-<text text-anchor="middle" font-family="monospace" font-size="14" fill="#222222"><tspan x="360" y="200.4" dominant-baseline="central">verificat…</tspan><tspan x="360" y="218.4" dominant-baseline="central">failed</tspan></text>
+<line x1="240" y1="172" x2="360" y2="224" stroke="#333333" stroke-width="1"/>
+<line x1="480" y1="172" x2="360" y2="224" stroke="#333333" stroke-width="1"/>
+<text text-anchor="middle" font-family="monospace" font-size="14" fill="#222222"><tspan x="360" y="180.3" dominant-baseline="central">verification</tspan><tspan x="360" y="198.3" dominant-baseline="central">failed</tspan></text>
+<text x="280" y="206.7" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">Y</text>
+<text x="440" y="206.7" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">N</text>
 <rect x="240" y="224" width="120" height="70" fill="#f8f8f8" stroke="none" stroke-width="1"/>
 <rect x="360" y="224" width="120" height="70" fill="#f8f8f8" stroke="none" stroke-width="1"/>
 <rect x="240" y="224" width="120" height="70" fill="#e8f5e9" stroke="#333333" stroke-width="1"/>
 <line x1="246" y1="224" x2="246" y2="294" stroke="#333333" stroke-width="1"/>
 <line x1="354" y1="224" x2="354" y2="294" stroke="#333333" stroke-width="1"/>
 <text text-anchor="middle" font-family="monospace" font-size="14" fill="#222222"><tspan x="300" y="241" dominant-baseline="central">flagError…</tspan><tspan x="300" y="259" dominant-baseline="central">checksum</tspan><tspan x="300" y="277" dominant-baseline="central">mismatch&quot;)</tspan></text>
-<rect x="360" y="224" width="120" height="32" fill="#f8f8f8" stroke="#333333" stroke-width="1"/>
-<line x1="360" y1="172" x2="360" y2="294" stroke="#333333" stroke-width="1"/>
+
+<line x1="360" y1="224" x2="480" y2="224" stroke="#333333" stroke-width="1"/>
+<line x1="360" y1="224" x2="360" y2="294" stroke="#333333" stroke-width="1"/>
 <rect x="240" y="172" width="240" height="122" fill="none" stroke="#333333" stroke-width="1"/>
 <line x1="480" y1="68" x2="480" y2="294" stroke="#333333" stroke-width="1"/>
 <rect x="480" y="68" width="240" height="226" fill="#f8f8f8" stroke="none" stroke-width="1"/>
@@ -296,19 +297,20 @@ call reportResults()</code></pre></div>
 <line x1="714" y1="120" x2="714" y2="172" stroke="#333333" stroke-width="1"/>
 <text text-anchor="middle" font-family="monospace" font-size="14" fill="#222222"><tspan x="600" y="137" dominant-baseline="central">verify(destinationC,</tspan><tspan x="600" y="155" dominant-baseline="central">checksumC)</tspan></text>
 <rect x="480" y="172" width="240" height="52" fill="#fff3e0" stroke="none" stroke-width="1"/>
-<line x1="480" y1="224" x2="600" y2="172" stroke="#333333" stroke-width="1"/>
-<line x1="720" y1="224" x2="600" y2="172" stroke="#333333" stroke-width="1"/>
-<text x="520" y="187.6" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">Y</text>
-<text x="680" y="187.6" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">N</text>
-<text text-anchor="middle" font-family="monospace" font-size="14" fill="#222222"><tspan x="600" y="200.4" dominant-baseline="central">verificat…</tspan><tspan x="600" y="218.4" dominant-baseline="central">failed</tspan></text>
+<line x1="480" y1="172" x2="600" y2="224" stroke="#333333" stroke-width="1"/>
+<line x1="720" y1="172" x2="600" y2="224" stroke="#333333" stroke-width="1"/>
+<text text-anchor="middle" font-family="monospace" font-size="14" fill="#222222"><tspan x="600" y="180.3" dominant-baseline="central">verification</tspan><tspan x="600" y="198.3" dominant-baseline="central">failed</tspan></text>
+<text x="520" y="206.7" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">Y</text>
+<text x="680" y="206.7" text-anchor="middle" font-family="monospace" font-size="14" fill="#222222" dominant-baseline="central">N</text>
 <rect x="480" y="224" width="120" height="70" fill="#f8f8f8" stroke="none" stroke-width="1"/>
 <rect x="600" y="224" width="120" height="70" fill="#f8f8f8" stroke="none" stroke-width="1"/>
 <rect x="480" y="224" width="120" height="70" fill="#e8f5e9" stroke="#333333" stroke-width="1"/>
 <line x1="486" y1="224" x2="486" y2="294" stroke="#333333" stroke-width="1"/>
 <line x1="594" y1="224" x2="594" y2="294" stroke="#333333" stroke-width="1"/>
 <text text-anchor="middle" font-family="monospace" font-size="14" fill="#222222"><tspan x="540" y="241" dominant-baseline="central">flagError…</tspan><tspan x="540" y="259" dominant-baseline="central">checksum</tspan><tspan x="540" y="277" dominant-baseline="central">mismatch&quot;)</tspan></text>
-<rect x="600" y="224" width="120" height="32" fill="#f8f8f8" stroke="#333333" stroke-width="1"/>
-<line x1="600" y1="172" x2="600" y2="294" stroke="#333333" stroke-width="1"/>
+
+<line x1="600" y1="224" x2="720" y2="224" stroke="#333333" stroke-width="1"/>
+<line x1="600" y1="224" x2="600" y2="294" stroke="#333333" stroke-width="1"/>
 <rect x="480" y="172" width="240" height="122" fill="none" stroke="#333333" stroke-width="1"/>
 <rect x="0" y="34" width="720" height="260" fill="none" stroke="#333333" stroke-width="1"/>
 <rect x="0" y="294" width="720" height="34" fill="#e8f5e9" stroke="#333333" stroke-width="1"/>

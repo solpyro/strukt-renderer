@@ -303,13 +303,15 @@ function renderTerminator(label: string, x: number, y: number, w: number, cfg: R
 
 // ── If / else-if / else ───────────────────────────────────────────────────────
 //
-// Classic NSD conditional: the condition row contains two diagonals that meet
-// at the top-centre, forming an inverted-V (^).  This divides the row into:
-//   • upper-left triangle  → "Y" label  (true / then branch)
-//   • upper-right triangle → "N" label  (false / else branch)
-//   • large lower triangle → condition text
+// NSD conditional: the condition row contains two diagonals that form a V (▽).
+// The diagonals run from the top-left and top-right corners down to a
+// bottom-centre apex, creating three regions:
+//   • large upper triangle  → condition text  (top of block)
+//   • lower-left triangle   → "Y" label       (true / then branch)
+//   • lower-right triangle  → "N" label       (false / else branch)
 // Below the condition row the available width is split 50/50 for the two
 // branches.  else-if chains are rendered as nested ifs inside the else column.
+// Empty branches render as plain background with no placeholder box.
 
 function renderIf(node: IfNode, x: number, y: number, w: number, cfg: ResolvedConfig): Rendered {
   // Flatten else-if chain into nested IfNodes (innermost first).
@@ -329,42 +331,62 @@ function renderIf(node: IfNode, x: number, y: number, w: number, cfg: ResolvedCo
   const halfW = Math.floor(w / 2);
   const otherHalf = w - halfW;
 
-  // The condition text lives inside the lower-centre triangle (~60 % of halfW).
+  // The condition text lives in the upper V-triangle; effective width at the
+  // text centroid (y + condH/3) is approximately w * 0.6.
   const condH = Math.max(
     cfg.minRowHeight * 1.5,
-    rowHeight(node.condition, halfW * 0.7, cfg),
+    rowHeight(node.condition, w * 0.6, cfg),
   );
 
-  // Render both branches to determine the maximum body height.
-  const thenR = renderBlock(node.thenBranch, x, y + condH, halfW, cfg);
-  const elseR = renderBlock(elseBody, x + halfW, y + condH, otherHalf, cfg);
-  const bodyH = Math.max(thenR.height, elseR.height);
+  // Render both branches; empty branches produce no SVG (no placeholder box).
+  const thenR = node.thenBranch.length > 0
+    ? renderBlock(node.thenBranch, x, y + condH, halfW, cfg)
+    : { svg: '', height: 0 };
+  const elseR = elseBody.length > 0
+    ? renderBlock(elseBody, x + halfW, y + condH, otherHalf, cfg)
+    : { svg: '', height: 0 };
+  const bodyH = Math.max(cfg.minRowHeight, thenR.height, elseR.height);
   const totalH = condH + bodyH;
 
-  // Y and N labels sit in the upper-left / upper-right corner triangles
-  // (centroid ≈ 1/6 of width, 1/3 of condH from the top).
-  const labelY = y + condH * 0.3;
+  // V-shape region centroids:
+  //   upper triangle  (TL, TR, BC) → condition text at (w/2,   condH/3)
+  //   lower-left tri  (TL, BL, BC) → Y label at         (halfW/3, 2*condH/3)
+  //   lower-right tri (TR, BR, BC) → N label at         (halfW + 2*otherHalf/3, 2*condH/3)
+  const condTextY = y + condH / 3;
+  const labelY    = y + (condH * 2) / 3;
 
   return {
     svg: [
-      // Condition row (fill only — border drawn by outer rect below)
+      // Condition row background (fill only — border drawn by outer rect below)
       svgRect(x, y, w, condH, cfg.colors.conditionFill, 'none'),
-      // Inverted-V diagonals
-      svgLine(x, y + condH, x + halfW, y, cfg.colors.border),
-      svgLine(x + w, y + condH, x + halfW, y, cfg.colors.border),
-      // Corner labels
-      svgCentredText(x + halfW / 3, labelY, 'Y', halfW / 2, cfg),
+      // V diagonals: top-left → bottom-centre, top-right → bottom-centre
+      svgLine(x,     y, x + halfW, y + condH, cfg.colors.border),
+      svgLine(x + w, y, x + halfW, y + condH, cfg.colors.border),
+      // Condition text in the large upper triangle
+      svgCentredText(x + w / 2, condTextY, node.condition, w * 0.6, cfg),
+      // Y / N labels in the lower-left / lower-right outer triangles
+      svgCentredText(x + halfW / 3,                   labelY, 'Y', halfW / 2,     cfg),
       svgCentredText(x + halfW + (otherHalf * 2) / 3, labelY, 'N', otherHalf / 2, cfg),
-      // Condition text in the large lower-centre triangle
-      svgCentredText(x + w / 2, y + condH * 0.72, node.condition, halfW * 0.8, cfg),
       // Column backgrounds (fill only)
-      svgRect(x, y + condH, halfW, bodyH, cfg.colors.processFill, 'none'),
+      svgRect(x,         y + condH, halfW,     bodyH, cfg.colors.processFill, 'none'),
       svgRect(x + halfW, y + condH, otherHalf, bodyH, cfg.colors.processFill, 'none'),
-      // Branch content
+      // Branch content (empty branches contribute nothing)
       thenR.svg,
       elseR.svg,
-      // Centre divider + outer border (drawn last so they are on top)
-      svgLine(x + halfW, y, x + halfW, y + totalH, cfg.colors.border),
+      // When a branch is empty its first block would normally draw the top
+      // border of the body column — add it explicitly instead.
+      ...(node.thenBranch.length === 0
+        ? [svgLine(x,         y + condH, x + halfW, y + condH, cfg.colors.border)]
+        : []),
+      ...(elseBody.length === 0
+        ? [svgLine(x + halfW, y + condH, x + w,     y + condH, cfg.colors.border)]
+        : []),
+      // Centre divider through the body — only needed when one branch is empty,
+      // because adjacent block borders provide natural separation otherwise.
+      ...(node.thenBranch.length === 0 || elseBody.length === 0
+        ? [svgLine(x + halfW, y + condH, x + halfW, y + totalH, cfg.colors.border)]
+        : []),
+      // Outer border
       svgRect(x, y, w, totalH, 'none', cfg.colors.border),
     ].join('\n'),
     height: totalH,
