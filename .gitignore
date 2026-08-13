@@ -2,3 +2,5 @@ node_modules/
 dist/
 *.tsbuildinfo
 .DS_Store
+# vitest diff artefacts (actual + diff PNGs on failure)
+tests/.vitest-attachments/

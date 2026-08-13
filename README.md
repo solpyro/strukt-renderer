@@ -126,6 +126,12 @@ npm test -- --update-snapshots
 # Watch mode
 npm run test:watch
 
+# Run visual regression tests in headless Chromium (requires Playwright)
+npm run test:visual
+
+# Update visual baselines after intentional renderer changes
+UPDATE_SCREENSHOTS=1 npm run test:visual
+
 # Build ESM + CJS + .d.ts into dist/
 npm run build
 
@@ -161,6 +167,7 @@ src/
 tests/
   parser.test.ts      44 tests
   renderer.test.ts    88 tests (14 SVG snapshots in __snapshots__/)
+  renderer.visual.test.ts  16 browser visual regression tests
   examples/           .strukt fixtures used by tests
 demo/
   generate.mjs   demo page generator script
