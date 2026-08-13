@@ -24,8 +24,11 @@ describe('render()', () => {
     expect(typeof render).toBe('function');
   });
 
-  it('throws (not yet implemented)', () => {
-    expect(() => render(singleProcess)).toThrow('Not implemented');
+  it('returns an SVG string for a minimal AST', () => {
+    const svg = render(singleProcess);
+    expect(typeof svg).toBe('string');
+    expect(svg).toMatch(/^<svg/);
+    expect(svg).toContain('xmlns="http://www.w3.org/2000/svg"');
   });
 
   // ── SVG structure ──────────────────────────────────────────────────────────
@@ -100,8 +103,10 @@ describe('struktToSvg()', () => {
     expect(typeof struktToSvg).toBe('function');
   });
 
-  it('throws (not yet implemented — parse() is not implemented)', () => {
-    expect(() => struktToSvg('x = 1')).toThrow('Not implemented');
+  it('parses and renders a simple source string', () => {
+    const svg = struktToSvg('x = 1');
+    expect(svg).toMatch(/^<svg/);
+    expect(svg).toContain('x = 1');
   });
 
   it.todo('parses and renders a complete Strukt source string in one call');
