@@ -461,11 +461,14 @@ function renderLoopPreTest(
   const totalH = condH + bodyR.height;
   return {
     svg: [
-      svgRect(x, y, w, condH, cfg.colors.loopFill, cfg.colors.border),
+      // no stroke on the bar — outer rect + explicit lines handle all borders
+      svgRect(x, y, w, condH, cfg.colors.loopFill, 'none'),
       svgCentredText(x + w / 2, y + condH / 2, condLabel, w, cfg),
       svgRect(x, y + condH, LOOP_STRIP_W, bodyR.height, cfg.colors.loopFill, 'none'),
       svgRect(x + LOOP_STRIP_W, y + condH, w - LOOP_STRIP_W, bodyR.height, cfg.colors.processFill, 'none'),
       bodyR.svg,
+      // horizontal divider starts at the strip edge so the strip–bar join is seamless
+      svgLine(x + LOOP_STRIP_W, y + condH, x + w, y + condH, cfg.colors.border),
       svgLine(x + LOOP_STRIP_W, y + condH, x + LOOP_STRIP_W, y + totalH, cfg.colors.border),
       svgRect(x, y, w, totalH, 'none', cfg.colors.border),
     ].join('\n'),
@@ -488,8 +491,11 @@ function renderLoopPostTest(
       svgRect(x, y, LOOP_STRIP_W, bodyR.height, cfg.colors.loopFill, 'none'),
       svgRect(x + LOOP_STRIP_W, y, w - LOOP_STRIP_W, bodyR.height, cfg.colors.processFill, 'none'),
       bodyR.svg,
-      svgLine(x + LOOP_STRIP_W, y, x + LOOP_STRIP_W, y + bodyR.height, cfg.colors.border),
-      svgRect(x, condY, w, condH, cfg.colors.loopFill, cfg.colors.border),
+      svgLine(x + LOOP_STRIP_W, y, x + LOOP_STRIP_W, condY, cfg.colors.border),
+      // horizontal divider ends at the strip edge so the strip–bar join is seamless
+      svgLine(x + LOOP_STRIP_W, condY, x + w, condY, cfg.colors.border),
+      // no stroke on the bar — outer rect + explicit lines handle all borders
+      svgRect(x, condY, w, condH, cfg.colors.loopFill, 'none'),
       svgCentredText(x + w / 2, condY + condH / 2, condLabel, w, cfg),
       svgRect(x, y, w, totalH, 'none', cfg.colors.border),
     ].join('\n'),
@@ -504,11 +510,14 @@ function renderLoopInfinite(body: Block, x: number, y: number, w: number, cfg: R
   const totalH = MARKER_H + bodyR.height;
   return {
     svg: [
-      svgRect(x, y, w, MARKER_H, cfg.colors.loopFill, cfg.colors.border),
+      // no stroke on the marker — outer rect + explicit lines handle all borders
+      svgRect(x, y, w, MARKER_H, cfg.colors.loopFill, 'none'),
       svgCentredText(x + w / 2, y + MARKER_H / 2, 'loop', w, cfg),
       svgRect(x, y + MARKER_H, LOOP_STRIP_W, bodyR.height, cfg.colors.loopFill, 'none'),
       svgRect(x + LOOP_STRIP_W, y + MARKER_H, w - LOOP_STRIP_W, bodyR.height, cfg.colors.processFill, 'none'),
       bodyR.svg,
+      // horizontal divider starts at the strip edge so the strip–marker join is seamless
+      svgLine(x + LOOP_STRIP_W, y + MARKER_H, x + w, y + MARKER_H, cfg.colors.border),
       svgLine(x + LOOP_STRIP_W, y + MARKER_H, x + LOOP_STRIP_W, y + totalH, cfg.colors.border),
       svgRect(x, y, w, totalH, 'none', cfg.colors.border),
     ].join('\n'),
