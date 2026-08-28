@@ -160,19 +160,31 @@ call reportResults()</code></pre></div>
   </section>
 
   <section class="example">
-    <div class="example-header">parallel-download.strukt</div>
+    <div class="example-header">loop-shapes.strukt</div>
     <div class="example-body">
-      <div class="source"><pre><code>title: Loops Demo
+      <div class="source"><pre><code>title: Loop Shapes
 
+# Pre-test (Γ): condition bar at top, strip down left
+while items remain in queue:
+    process next item
+    log progress
+
+for each record in dataset:
+    validate record
+    transform record
+
+# Infinite (Γ): loop marker at top, strip down left
 loop:
-  while true:
-    for i from 0 to 5:
-      increment i
-    do:
-      decrement i
-    while i > 0</code></pre></div>
+    wait for event
+    handle event
+
+# Post-test (L): strip down left, condition bar at bottom
+do:
+    read user input
+    validate input
+while input is invalid</code></pre></div>
       <div class="diagram"></div>
-    </div> 
+    </div>
   </section>
 
   <script src="../dist/index.global.js"></script>

@@ -443,42 +443,52 @@ function renderSwitch(node: SwitchNode, x: number, y: number, w: number, cfg: Re
 }
 
 // ── Loops ──────────────────────────────────────────────────────────────────────
+//
+// All loops render a containment shape to show steps are inside the loop:
+//   Γ shape (while / for / loop): condition bar at top, left strip down the body
+//   L shape (do-while):           left strip down the body, condition bar at bottom
 
-/** Pre-test loop (while / for): condition bar at the top. */
+const LOOP_STRIP_W = 10;
+
+/** Pre-test loop (while / for): Γ shape — condition bar at top, left strip down body. */
 function renderLoopPreTest(
   condLabel: string, body: Block,
   x: number, y: number, w: number,
   cfg: ResolvedConfig,
 ): Rendered {
   const condH = rowHeight(condLabel, w, cfg);
-  const bodyR = renderBlock(body, x, y + condH, w, cfg);
+  const bodyR = renderBlock(body, x + LOOP_STRIP_W, y + condH, w - LOOP_STRIP_W, cfg);
   const totalH = condH + bodyR.height;
   return {
     svg: [
       svgRect(x, y, w, condH, cfg.colors.loopFill, cfg.colors.border),
       svgCentredText(x + w / 2, y + condH / 2, condLabel, w, cfg),
-      svgRect(x, y + condH, w, bodyR.height, cfg.colors.processFill, 'none'),
+      svgRect(x, y + condH, LOOP_STRIP_W, bodyR.height, cfg.colors.loopFill, 'none'),
+      svgRect(x + LOOP_STRIP_W, y + condH, w - LOOP_STRIP_W, bodyR.height, cfg.colors.processFill, 'none'),
       bodyR.svg,
+      svgLine(x + LOOP_STRIP_W, y + condH, x + LOOP_STRIP_W, y + totalH, cfg.colors.border),
       svgRect(x, y, w, totalH, 'none', cfg.colors.border),
     ].join('\n'),
     height: totalH,
   };
 }
 
-/** Post-test loop (do-while): condition bar at the bottom. */
+/** Post-test loop (do-while): L shape — left strip down body, condition bar at bottom. */
 function renderLoopPostTest(
   condLabel: string, body: Block,
   x: number, y: number, w: number,
   cfg: ResolvedConfig,
 ): Rendered {
-  const bodyR = renderBlock(body, x, y, w, cfg);
+  const bodyR = renderBlock(body, x + LOOP_STRIP_W, y, w - LOOP_STRIP_W, cfg);
   const condH = rowHeight(condLabel, w, cfg);
   const condY = y + bodyR.height;
   const totalH = bodyR.height + condH;
   return {
     svg: [
-      svgRect(x, y, w, bodyR.height, cfg.colors.processFill, 'none'),
+      svgRect(x, y, LOOP_STRIP_W, bodyR.height, cfg.colors.loopFill, 'none'),
+      svgRect(x + LOOP_STRIP_W, y, w - LOOP_STRIP_W, bodyR.height, cfg.colors.processFill, 'none'),
       bodyR.svg,
+      svgLine(x + LOOP_STRIP_W, y, x + LOOP_STRIP_W, y + bodyR.height, cfg.colors.border),
       svgRect(x, condY, w, condH, cfg.colors.loopFill, cfg.colors.border),
       svgCentredText(x + w / 2, condY + condH / 2, condLabel, w, cfg),
       svgRect(x, y, w, totalH, 'none', cfg.colors.border),
@@ -487,17 +497,19 @@ function renderLoopPostTest(
   };
 }
 
-/** Infinite loop (no condition bar): thin "loop" marker at the top. */
+/** Infinite loop: Γ shape — thin "loop" marker at top, left strip down body. */
 function renderLoopInfinite(body: Block, x: number, y: number, w: number, cfg: ResolvedConfig): Rendered {
   const MARKER_H = Math.ceil(cfg.minRowHeight / 2);
-  const bodyR = renderBlock(body, x, y + MARKER_H, w, cfg);
+  const bodyR = renderBlock(body, x + LOOP_STRIP_W, y + MARKER_H, w - LOOP_STRIP_W, cfg);
   const totalH = MARKER_H + bodyR.height;
   return {
     svg: [
       svgRect(x, y, w, MARKER_H, cfg.colors.loopFill, cfg.colors.border),
       svgCentredText(x + w / 2, y + MARKER_H / 2, 'loop', w, cfg),
-      svgRect(x, y + MARKER_H, w, bodyR.height, cfg.colors.processFill, 'none'),
+      svgRect(x, y + MARKER_H, LOOP_STRIP_W, bodyR.height, cfg.colors.loopFill, 'none'),
+      svgRect(x + LOOP_STRIP_W, y + MARKER_H, w - LOOP_STRIP_W, bodyR.height, cfg.colors.processFill, 'none'),
       bodyR.svg,
+      svgLine(x + LOOP_STRIP_W, y + MARKER_H, x + LOOP_STRIP_W, y + totalH, cfg.colors.border),
       svgRect(x, y, w, totalH, 'none', cfg.colors.border),
     ].join('\n'),
     height: totalH,
