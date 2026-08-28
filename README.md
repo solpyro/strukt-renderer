@@ -88,7 +88,7 @@ interface ColorScheme {
   text:          string;  // all label text
   processFill:   string;  // plain process rectangles
   conditionFill: string;  // if / switch condition bars
-  loopFill:      string;  // while / for / loop bars
+  loopFill:      string;  // while / for / loop / do-while
   callFill:      string;  // call (sub-process) blocks
   exitFill:      string;  // return / break / exit blocks
   parallelFill:  string;  // parallel block header
